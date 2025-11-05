@@ -41,3 +41,26 @@ yarn-error.log*
 next-env.d.ts
 
 package-lock.json
+
+# Hardhat - Smart Contracts
+# Node modules
+/hardhat/node_modules
+
+# Compilation output
+/hardhat/dist
+
+# pnpm deploy output
+/hardhat/bundle
+
+# Hardhat Build Artifacts
+/hardhat/artifacts
+
+# Hardhat compilation (v2) support directory
+/hardhat/cache
+
+# Typechain output
+/hardhat/types
+
+# Hardhat coverage reports
+/hardhat/coverage
+

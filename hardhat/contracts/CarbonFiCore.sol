@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-// Impor AccessControl dan Counter
+// Impor AccessControl
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 // --- FIX TAMBAHAN ---
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 
@@ -18,9 +17,8 @@ import "./RetiredProof.sol";
  * --- FIX --- Sekarang juga mewarisi ERC1155Holder.
  */
 contract CarbonFiCore is AccessControl, ERC1155Holder {
-    using Counters for Counters.Counter;
     // Counter untuk Project ID. Kita mulai dari 1.
-    Counters.Counter private _projectIdCounter;
+    uint256 private _projectIdCounter = 1;
 
     // Role untuk Verificator
     bytes32 public constant VERIFIER_ROLE = keccak256("VERIFIER_ROLE");
@@ -57,9 +55,6 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
         // Deployer mendapatkan admin role dan verifier role
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(VERIFIER_ROLE, msg.sender);
-        
-        // Memulai counter ID dari 1
-        _projectIdCounter.increment();
     }
 
     // --- FUNGSI SETUP (PENTING!) ---
@@ -83,8 +78,8 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
         require(ngoWallet != address(0), "Invalid NGO wallet");
         require(amount > 0, "Amount must be greater than zero");
 
-        uint256 projectId = _projectIdCounter.current();
-        _projectIdCounter.increment();
+        uint256 projectId = _projectIdCounter;
+        _projectIdCounter++;
 
         // 1. Mint NFT Sertifikat (ERC721) ke NGO
         certificateContract.safeMint(ngoWallet, projectId, metadataUri);

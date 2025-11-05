@@ -4,7 +4,6 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 /**
  * @title RetiredProof
@@ -13,8 +12,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
  * Dikelola oleh CarbonFiCore.
  */
 contract RetiredProof is ERC721, ERC721URIStorage, AccessControl {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIdCounter;
+    uint256 private _tokenIdCounter;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -37,9 +35,9 @@ contract RetiredProof is ERC721, ERC721URIStorage, AccessControl {
      * Menggunakan ID otomatis.
      */
     function safeMint(address to, string memory uri) public onlyRole(MINTER_ROLE) {
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
-        
+        uint256 tokenId = _tokenIdCounter;
+        _tokenIdCounter++;
+
         _mint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
