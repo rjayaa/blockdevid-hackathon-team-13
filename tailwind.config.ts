@@ -49,6 +49,13 @@ export default {
 					'3': 'hsl(var(--chart-3))',
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
+				},
+				// CarbonFi Color Palette
+				carbon: {
+					light: '#FFFD8F',
+					medium: '#B0CE88',
+					primary: '#4C763B',
+					dark: '#043915'
 				}
 			},
 			borderRadius: {
