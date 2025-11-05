@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-
+body {
+  /* font-family: Arial, Helvetica, sans-serif; */
+}
 
 @layer base {
   :root {
 
-    --background: 0 0% 100%;
+    --background: #FFFD8F;
 
-    --foreground: 0 0% 3.9%;
+    --foreground: #043915;
 
     --card: 0 0% 100%;
 
