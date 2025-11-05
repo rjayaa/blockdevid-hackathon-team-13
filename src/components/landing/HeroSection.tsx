@@ -11,7 +11,7 @@ const HalftoneGlobeDynamic = dynamic(
 
 const HeroSection = () => {
     return (
-        <div className="bg-[#B0CE88] h-screen flex flex-col justify-end px-8 pb-8">
+        <div className="bg-carbon-medium h-screen flex flex-col justify-end px-8 pb-8">
             <div className="flex flex-col items-center justify-end">
 
                 <div className='flex items-center justify-center w-full h-auto'>
