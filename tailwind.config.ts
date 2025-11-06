@@ -9,6 +9,9 @@ export default {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				space: 'var(--font-space-grotesk)'
+			},
 			colors: {
 				background: 'var(--background)',
 				foreground: 'var(--foreground)',
