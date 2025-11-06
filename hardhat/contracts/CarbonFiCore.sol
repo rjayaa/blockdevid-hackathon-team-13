@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 // Impor AccessControl
 import "@openzeppelin/contracts/access/AccessControl.sol";
-// --- FIX TAMBAHAN ---
+// Impor untuk menerima ERC1155
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 
 // Impor 3 kontrak token kita
@@ -14,10 +14,12 @@ import "./RetiredProof.sol";
 /**
  * @title CarbonFiCore
  * @dev Kontrak utama yang mengatur semua logika bisnis.
- * --- FIX --- Sekarang juga mewarisi ERC1155Holder.
+ * v2.1: Menghapus dependency Counters, kembali ke uint256 manual.
+ * Mengandung patch certificateHash dan fix Re-entrancy.
  */
 contract CarbonFiCore is AccessControl, ERC1155Holder {
-    // Counter untuk Project ID. Kita mulai dari 1.
+    // --- [UPDATE] ---
+    // Counter manual untuk Project ID. Kita mulai dari 1.
     uint256 private _projectIdCounter = 1;
 
     // Role untuk Verificator
@@ -29,10 +31,11 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
     RetiredProof public proofContract;
 
     // --- STORAGE ---
-    // Mapping dari projectId -> alamat NGO (pemilik proyek)
     mapping(uint256 => address) public projectOwner;
-    // Mapping dari projectId -> harga per 1 token dalam Wei
     mapping(uint256 => uint256) public tokenPriceInWei;
+
+    // --- [SECURITY PATCH 1] ---
+    mapping(bytes32 => bool) public isHashUsed;
 
     // --- EVENTS ---
     event ProjectRegistered(uint256 indexed projectId, address indexed owner, uint256 amount, string metadataUri);
@@ -52,16 +55,11 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
         tokenContract = CarbonToken(_tokenAddress);
         proofContract = RetiredProof(_proofAddress);
 
-        // Deployer mendapatkan admin role dan verifier role
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(VERIFIER_ROLE, msg.sender);
     }
 
-    // --- FUNGSI SETUP (PENTING!) ---
-    /**
-     * @dev Dipanggil 1x SETELAH deploy untuk memberikan Core contract
-     * hak akses (MINTER/BURNER) ke kontrak token.
-     */
+    // --- FUNGSI SETUP (Tidak perlu dipanggil jika pakai script deploy) ---
     function grantRolesToCore() public onlyRole(DEFAULT_ADMIN_ROLE) {
         address coreAddress = address(this);
         certificateContract.setupCoreMinter(coreAddress);
@@ -73,22 +71,28 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
     function registerProject(
         address ngoWallet,
         uint256 amount,
-        string memory metadataUri
+        string memory metadataUri,
+        bytes32 certificateHash // <-- [PATCH 1] Parameter baru
     ) public onlyRole(VERIFIER_ROLE) {
+        
+        // --- [SECURITY PATCH 1] ---
+        require(!isHashUsed[certificateHash], "Certificate hash already used");
+        
         require(ngoWallet != address(0), "Invalid NGO wallet");
         require(amount > 0, "Amount must be greater than zero");
 
+        isHashUsed[certificateHash] = true;
+        // --------------------------
+
+        // --- [UPDATE] ---
+        // Gunakan counter manual
         uint256 projectId = _projectIdCounter;
         _projectIdCounter++;
 
-        // 1. Mint NFT Sertifikat (ERC721) ke NGO
-        certificateContract.safeMint(ngoWallet, projectId, metadataUri);
-
-        // 2. Mint Token Karbon (ERC1155) ke kontrak ini (Escrow)
-        tokenContract.mint(address(this), projectId, amount, metadataUri);
-
-        // 3. Simpan data pemilik
         projectOwner[projectId] = ngoWallet;
+
+        certificateContract.safeMint(ngoWallet, projectId, metadataUri);
+        tokenContract.mint(address(this), projectId, amount, metadataUri);
 
         emit ProjectRegistered(projectId, ngoWallet, amount, metadataUri);
     }
@@ -104,6 +108,11 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
 
     // --- FASE 3: BELI TOKEN ---
     function buyTokens(uint256 projectId, uint256 amount) public payable {
+        // --- [SECURITY PATCH 2] ---
+        // Pola "Checks-Effects-Interactions"
+        // --------------------------
+
+        // 1. CHECKS
         uint256 price = tokenPriceInWei[projectId];
         address seller = projectOwner[projectId];
 
@@ -111,20 +120,20 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
         require(seller != address(0), "Project not found");
         require(amount > 0, "Amount must be greater than zero");
 
-        // Hitung total biaya
         uint256 totalCost = price * amount;
         require(msg.value == totalCost, "Incorrect ETH sent");
 
-        // Cek apakah kontrak masih punya token di escrow
         uint256 escrowBalance = tokenContract.balanceOf(address(this), projectId);
         require(escrowBalance >= amount, "Not enough tokens in escrow");
 
-        // 1. Bayar Penjual (NGO)
+        // 2. EFFECTS (Ubah State Internal Dulu)
+        tokenContract.safeTransferFrom(address(this), msg.sender, projectId, amount, "");
+
+        // 3. INTERACTIONS (Kirim ETH/LSK Paling Akhir)
         (bool success, ) = payable(seller).call{value: totalCost}("");
         require(success, "Payment to NGO failed");
-
-        // 2. Transfer Token (ERC1155) ke Pembeli
-        tokenContract.safeTransferFrom(address(this), msg.sender, projectId, amount, "");
+        
+        // --------------------------
 
         emit TokensPurchased(projectId, msg.sender, seller, amount, totalCost);
     }
@@ -133,18 +142,13 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
     function retireTokens(uint256 projectId, uint256 amount, string memory retirementUri) public {
         require(amount > 0, "Amount must be greater than zero");
 
-        // 1. Bakar Token (ERC1155) milik msg.sender
         tokenContract.burn(msg.sender, projectId, amount);
-
-        // 2. Mint Bukti Pensiun (ERC721) ke msg.sender
         proofContract.safeMint(msg.sender, retirementUri);
 
         emit TokensRetired(projectId, msg.sender, amount);
     }
 
-    /**
-     * @dev --- FIX --- Override untuk mendukung AccessControl dan ERC1155Holder
-     */
+    // --- FUNGSI VIEW & UTILS ---
     function supportsInterface(bytes4 interfaceId) public view override(AccessControl, ERC1155Holder) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
