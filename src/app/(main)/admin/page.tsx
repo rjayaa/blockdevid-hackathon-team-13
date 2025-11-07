@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { checkVerifierRole } from "@/lib/contract-service";
 
+const DUMMY_ADMIN_ADDRESS = "0x00000"
+
 export default function AdminDashboard() {
   const { account } = usePanna();
   const router = useRouter();
