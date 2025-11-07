@@ -7,8 +7,7 @@ import { DUMMY_CERTIFICATES, DUMMY_USER_TOKENS, Project, DUMMY_PROJECTS, Certifi
 import { ArrowRight, Globe, Lock, Leaf, X } from 'lucide-react';
 import { UserAsset } from '@/lib/types';
 import Link from 'next/link';
-
-const DUMMY_USER_ADDRESS = '0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2'; // NGO A or Company B
+import { usePanna } from 'panna-sdk';
 
 // Helper to find project details (simulates IPFS lookup)
 const getProjectDetails = (tokenId: number): Project | undefined => {
@@ -76,13 +75,23 @@ const CertificateCard = ({ cert }: { cert: Certificate }) => {
 
 
 export default function UserDashboard() {
+  const { account } = usePanna();
+
+  if (!account?.address) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>Please connect your wallet to view your dashboard</p>
+      </div>
+    );
+  }
+
   return (
     <div className="pb-12 px-8">
       <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-foreground pb-2">
         Dashboard Aset Saya
       </h1>
       <p className="text-sm text-foreground/80 mb-8 font-space">
-        Wallet Address: {DUMMY_USER_ADDRESS.slice(0, 10)}...{DUMMY_USER_ADDRESS.slice(-8)}
+        Wallet Address: {account.address.slice(0, 10)}...{account.address.slice(-8)}
       </p>
 
       {/* Token Credits (ERC-1155) */}
