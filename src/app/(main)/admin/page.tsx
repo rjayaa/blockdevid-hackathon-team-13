@@ -16,6 +16,8 @@ import { ethers } from "ethers";
 // Admin address - sama dengan Navbar
 const VERIFICATOR_ADDRESS = "0x14C7F1d75e8B74618D77E6eE5A830EeE7D7FB64F".toLowerCase();
 
+const DUMMY_ADMIN_ADDRESS = "0x00000"
+
 export default function AdminDashboard() {
   const account = useActiveAccount();
   const router = useRouter();

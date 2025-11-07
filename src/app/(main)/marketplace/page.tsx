@@ -16,7 +16,7 @@ const MarketplaceCard = ({ project }: { project: Project }) => {
     };
 
     return (
-        <Card className="border-2 border-foreground hover:shadow-xl transition-all bg-carbon-light/70">
+        <Card className="border-2 border-foreground hover:shadow-xl transition-all bg-carbon-medium/70">
             <CardHeader>
                 <CardTitle className="uppercase text-lg font-bold">{project.name}</CardTitle>
                 <CardDescription className="text-sm text-foreground/80 font-space">{project.location}</CardDescription>
@@ -38,7 +38,7 @@ const MarketplaceCard = ({ project }: { project: Project }) => {
                         placeholder="Jumlah Beli (Ton)" 
                         defaultValue={100}
                         min={1}
-                        className="bg-foreground border-foreground"
+                        className="bg-carbon-medium border-foreground"
                     />
                     <Button 
                         type="submit" 
@@ -58,7 +58,7 @@ export default function MarketplacePage() {
     const availableProjects = DUMMY_PROJECTS.filter(p => p.isForSale);
 
     return (
-        <div className="container mx-auto pb-12 px-4 md:px-8">
+        <div className=" pb-12 px-4 md:px-8">
             <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-foreground pb-2">
                 Marketplace CarbonFi
             </h1>
