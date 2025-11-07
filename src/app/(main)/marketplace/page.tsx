@@ -239,7 +239,7 @@ export default function MarketplacePage() {
     return (
         <div className=" pb-12 px-4 md:px-8">
             <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-foreground pb-2">
-                Marketplace CarbonFi
+                Marketplace PORCE
             </h1>
             <p className="text-sm text-foreground/80 mb-8 font-space">
                 Browse, verifikasi, dan beli kredit karbon yang tersedia dari proyek-proyek Indonesia.

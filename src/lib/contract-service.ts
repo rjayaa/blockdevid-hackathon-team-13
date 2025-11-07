@@ -4,7 +4,7 @@ import { CORE_ABI, CORE_CONTRACT_ADDRESS } from '@/lib/contractConfig';
 const RPC_URL = 'https://rpc.sepolia-api.lisk.com';
 
 /**
- * Check if user has VERIFIER_ROLE in CarbonFiCore contract
+ * Check if user has VERIFIER_ROLE in PORCE Core contract
  */
 export async function checkVerifierRole(userAddress: string): Promise<boolean> {
   try {
@@ -38,7 +38,7 @@ export async function checkVerifierRole(userAddress: string): Promise<boolean> {
     // Generate VERIFIER_ROLE hash
     const VERIFIER_ROLE = ethers.id('VERIFIER_ROLE');
     console.log('   🔐 VERIFIER_ROLE hash:', VERIFIER_ROLE);
-    console.log('   🔐 Expected hash (from CarbonFiCore.sol):', '0x0ce23c3e399818cfee81a7ab0880f714e53d7672b08df0fa62f2843416e1ea09');
+    console.log('   🔐 Expected hash (from PORCE Core):', '0x0ce23c3e399818cfee81a7ab0880f714e53d7672b08df0fa62f2843416e1ea09');
 
     // Check if user has role
     console.log('   🔍 Calling contract.hasRole()...');

@@ -1,15 +1,15 @@
 // src/lib/constants.ts (DUMMY CONTRACT ADDRESSES)
 // Ini harus diganti dengan alamat kontrak yang sebenarnya setelah deployment ke Lisk Sepolia
 export const CONTRACT_ADDRESSES = {
-  CARBON_FI_CORE: '0x5Fb30d8dFbf26C957abD0d922a84E290c06463Cb', // Contract utama (Minter/Burner/Core Logic)
-  CARBON_TOKEN: '0x88F065464161b9428Ff72a4E10c0e393318f5F9B', // CarbonToken.sol (ERC-1155)
-  PROJECT_CERTIFICATE: '0x9fE46f5c8F79D4c74f5145fC12a6D1E61618e7eF', // ProjectCertificate.sol (ERC-721)
-  RETIRED_PROOF: '0xCf75dC8d8A4f757f12e873B8e7587B67e2F5f84E', // RetiredProof.sol (ERC-721)
+  PORCE_CORE: '0x5Fb30d8dFbf26C957abD0d922a84E290c06463Cb', // Contract utama (Minter/Burner/Core Logic)
+  PORCE_TOKEN: '0x88F065464161b9428Ff72a4E10c0e393318f5F9B', // PORCEToken.sol (ERC-1155)
+  PORCE_CERTIFICATE: '0x9fE46f5c8F79D4c74f5145fC12a6D1E61618e7eF', // ProjectCertificate.sol (ERC-721)
+  PORCE_PROOF: '0xCf75dC8d8A4f757f12e873B8e7587B67e2F5f84E', // RetiredProof.sol (ERC-721)
 };
 
 export const CONTRACT_ABI_PLACEHOLDER = {
-    CarbonFiCore: 'ABI_CARBON_FI_CORE_GOES_HERE',
-    CarbonToken: 'ABI_CARBON_TOKEN_GOES_HERE',
+    PORCECore: 'ABI_PORCE_CORE_GOES_HERE',
+    PORCEToken: 'ABI_PORCE_TOKEN_GOES_HERE',
     ProjectCertificate: 'ABI_PROJECT_CERTIFICATE_GOES_HERE',
     RetiredProof: 'ABI_RETIRED_PROOF_GOES_HERE',
 };

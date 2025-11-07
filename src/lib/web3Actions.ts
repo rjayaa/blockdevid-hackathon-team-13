@@ -22,7 +22,7 @@ function getReadOnlyContract() {
 
 // --- [HELPER 2: UNTUK TRANSAKSI/WRITE] ---
 /**
- * Membuat instance dari kontrak CarbonFiCore (Untuk Transaksi/WRITE).
+ * Membuat instance dari kontrak PORCE Core (Untuk Transaksi/WRITE).
  * @param signer - Signer dari Panna SDK atau wallet lainnya
  */
 export function getCoreContract(signer: any) {

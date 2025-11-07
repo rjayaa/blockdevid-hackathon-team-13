@@ -81,7 +81,7 @@ const Navbar = () => {
         href="/"
         className="text-lg tracking-wider px-4 py-2 bg-foreground text-carbon-medium rounded-sm hover:bg-carbon-primary hover:text-carbon-light transition-colors duration-300"
       >
-        CarbonFi
+        PORCE
       </Link>
 
       <nav className="flex space-x-6 text-sm uppercase items-center font-space">
