@@ -6,6 +6,22 @@ import { LoginButton } from "panna-sdk";
 import { useActiveWallet, useDisconnect } from "thirdweb/react";
 import Link from "next/link";
 
+function getNetworkNameNavbar(chainId: number | null): string {
+  switch (chainId) {
+    case 1:
+      return "Ethereum Mainnet";
+    case 11155111:
+      return "Ethereum Sepolia";
+    case 4202:
+      return "Lisk Sepolia (CORRECT)";
+    case 1135:
+      return "Lisk Mainnet";
+    default:
+      return `Unknown (${chainId})`;
+  }
+}
+
+// Admin address - harus sama dengan address yang punya VERIFIER_ROLE di smart contract
 const VERIFICATOR_ADDRESS =
   "0x14C7F1d75e8B74618D77E6eE5A830EeE7D7FB64F".toLowerCase();
 
@@ -18,12 +34,31 @@ const Navbar = () => {
   const userAddress = account?.address?.toLowerCase() || "";
   const isAdmin = userAddress === VERIFICATOR_ADDRESS;
 
-  // Debug: Log account info
-  if (account?.address) {
-    console.log("📍 Navbar - Connected Address:", account.address);
-    console.log("🔐 Expected Admin Address:", VERIFICATOR_ADDRESS);
-    console.log("✓ Is Admin?", isAdmin);
-  }
+  // Debug: Log account info and network
+  useEffect(() => {
+    if (account?.address) {
+      console.log("📍 Navbar - Connected Address:", account.address);
+      console.log("🔐 Expected Admin Address:", VERIFICATOR_ADDRESS);
+      console.log("✓ Is Admin?", isAdmin);
+
+      // Detect current network
+      if (typeof window !== "undefined" && (window as any).ethereum) {
+        const currentChainId = (window as any).ethereum.chainId;
+        const chainIdNum = currentChainId ? parseInt(currentChainId, 16) : null;
+        console.log("🌐 Current Network Chain ID:", chainIdNum);
+        console.log("🌐 Current Network Name:", getNetworkNameNavbar(chainIdNum));
+
+        if (chainIdNum !== 4202) {
+          console.warn(
+            "⚠️ WARNING: Connected to wrong network! Expected Lisk Sepolia (4202), got:",
+            getNetworkNameNavbar(chainIdNum)
+          );
+        } else {
+          console.log("✓ Connected to correct network: Lisk Sepolia");
+        }
+      }
+    }
+  }, [account?.address, isAdmin]);
 
   // Close dropdown when clicking outside
   useEffect(() => {

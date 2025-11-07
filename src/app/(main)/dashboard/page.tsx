@@ -7,7 +7,7 @@ import { DUMMY_CERTIFICATES, DUMMY_USER_TOKENS, Project, DUMMY_PROJECTS, Certifi
 import { ArrowRight, Globe, Lock, Leaf, X } from 'lucide-react';
 import { UserAsset } from '@/lib/types';
 import Link from 'next/link';
-import { usePanna } from 'panna-sdk';
+import { useActiveAccount } from 'panna-sdk';
 
 // Helper to find project details (simulates IPFS lookup)
 const getProjectDetails = (tokenId: number): Project | undefined => {
@@ -75,7 +75,7 @@ const CertificateCard = ({ cert }: { cert: Certificate }) => {
 
 
 export default function UserDashboard() {
-  const { account } = usePanna();
+  const account = useActiveAccount();
 
   if (!account?.address) {
     return (
