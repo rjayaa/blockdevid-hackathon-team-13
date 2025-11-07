@@ -1,8 +1,10 @@
 import { ethers } from "ethers";
-import { 
-  CORE_CONTRACT_ADDRESS, 
-  CORE_ABI 
-} from "./contractConfig"; // Hanya mengimpor yang kita butuhkan
+import {
+  CORE_CONTRACT_ADDRESS,
+  CORE_ABI
+} from "./contractConfig";
+
+const RPC_URL = "https://rpc.sepolia-api.lisk.com";
 
 // --- [HELPER 1: READ-ONLY] ---
 /**
@@ -10,8 +12,7 @@ import {
  * Ini tidak butuh wallet/signer dan bagus untuk fetch data publik.
  */
 function getReadOnlyContract() {
-  // Kita pakai RPC publik Lisk Sepolia
-  const provider = new ethers.JsonRpcProvider("https://rpc.sepolia-api.lisk.com");
+  const provider = new ethers.JsonRpcProvider(RPC_URL);
   return new ethers.Contract(
     CORE_CONTRACT_ADDRESS,
     CORE_ABI,
@@ -21,24 +22,13 @@ function getReadOnlyContract() {
 
 // --- [HELPER 2: UNTUK TRANSAKSI/WRITE] ---
 /**
- * Catatan: Fungsi `getSigner` ini adalah placeholder.
- * GANTI INI DENGAN LOGIKA DARI panna-provider.tsx
- * Tim frontend harus menyediakan objek 'signer' ini.
- */
-async function getSigner() {
-  if (typeof window.ethereum === "undefined") {
-    throw new Error("MetaMask (atau provider) tidak terdeteksi!");
-  }
-  const provider = new ethers.BrowserProvider(window.ethereum);
-  const signer = await provider.getSigner();
-  return signer;
-}
-
-/**
  * Membuat instance dari kontrak CarbonFiCore (Untuk Transaksi/WRITE).
+ * @param signer - Signer dari Panna SDK atau wallet lainnya
  */
-async function getWriteContract() {
-  const signer = await getSigner();
+export function getCoreContract(signer: any) {
+  if (!signer) {
+    throw new Error("Signer tidak tersedia! Pastikan wallet sudah connected.");
+  }
   return new ethers.Contract(
     CORE_CONTRACT_ADDRESS,
     CORE_ABI,
@@ -52,13 +42,14 @@ async function getWriteContract() {
  * Ini akan dipanggil dari halaman admin oleh Verificator.
  */
 export async function callRegisterProject(
+  signer: any,
   ngoWallet: string,
   amount: number,
   metadataUri: string,
   certificateHash: string
 ) {
   try {
-    const contract = await getWriteContract(); // Butuh signer
+    const contract = getCoreContract(signer); // Butuh signer
     console.log("Mengirim transaksi registerProject...");
     
     // Pastikan hash adalah 32 bytes
@@ -86,11 +77,12 @@ export async function callRegisterProject(
  * Ini akan dipanggil dari halaman admin oleh Verificator.
  */
 export async function callSetTokenPrice(
+  signer: any,
   projectId: number,
-  priceInWei: string 
+  priceInWei: string
 ) {
   try {
-    const contract = await getWriteContract(); // Butuh signer
+    const contract = getCoreContract(signer); // Butuh signer
     console.log(`Menetapkan harga untuk projectId ${projectId}...`);
 
     const tx = await contract.setTokenPrice(projectId, priceInWei);
@@ -110,12 +102,13 @@ export async function callSetTokenPrice(
  * Ini akan dipanggil dari halaman Marketplace oleh Perusahaan B.
  */
 export async function callBuyTokens(
+  signer: any,
   projectId: number,
   amount: number,
   totalCostInWei: string
 ) {
   try {
-    const contract = await getWriteContract(); // Butuh signer
+    const contract = getCoreContract(signer); // Butuh signer
     console.log(`Membeli ${amount} token dari projectId ${projectId}...`);
 
     const tx = await contract.buyTokens(
@@ -141,12 +134,13 @@ export async function callBuyTokens(
  * Ini akan dipanggil dari halaman Portfolio oleh Perusahaan B.
  */
 export async function callRetireTokens(
+  signer: any,
   projectId: number,
   amount: number,
   retirementUri: string
 ) {
   try {
-    const contract = await getWriteContract(); // Butuh signer
+    const contract = getCoreContract(signer); // Butuh signer
     console.log(`Membakar ${amount} token dari projectId ${projectId}...`);
 
     const tx = await contract.retireTokens(
