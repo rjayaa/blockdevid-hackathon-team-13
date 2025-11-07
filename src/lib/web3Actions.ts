@@ -1,11 +1,29 @@
 import { ethers } from "ethers";
-import { CORE_CONTRACT_ADDRESS, CORE_ABI } from "./contractConfig";
+import { 
+  CORE_CONTRACT_ADDRESS, 
+  CORE_ABI 
+} from "./contractConfig"; // Hanya mengimpor yang kita butuhkan
 
+// --- [HELPER 1: READ-ONLY] ---
+/**
+ * Membuat instance kontrak "Read-Only" (Hanya Baca).
+ * Ini tidak butuh wallet/signer dan bagus untuk fetch data publik.
+ */
+function getReadOnlyContract() {
+  // Kita pakai RPC publik Lisk Sepolia
+  const provider = new ethers.JsonRpcProvider("https://rpc.sepolia-api.lisk.com");
+  return new ethers.Contract(
+    CORE_CONTRACT_ADDRESS,
+    CORE_ABI,
+    provider
+  );
+}
+
+// --- [HELPER 2: UNTUK TRANSAKSI/WRITE] ---
 /**
  * Catatan: Fungsi `getSigner` ini adalah placeholder.
- * Di aplikasi Next.js-mu, kamu akan mendapatkan 'signer' dari 
- * provider wallet-mu (seperti PannaSDK, Wagmi, Ethers, dll).
- * * Tim frontend harus menyediakan objek 'signer' ini.
+ * GANTI INI DENGAN LOGIKA DARI panna-provider.tsx
+ * Tim frontend harus menyediakan objek 'signer' ini.
  */
 async function getSigner() {
   if (typeof window.ethereum === "undefined") {
@@ -17,9 +35,9 @@ async function getSigner() {
 }
 
 /**
- * Membuat instance dari kontrak CarbonFiCore.
+ * Membuat instance dari kontrak CarbonFiCore (Untuk Transaksi/WRITE).
  */
-async function getCoreContract() {
+async function getWriteContract() {
   const signer = await getSigner();
   return new ethers.Contract(
     CORE_CONTRACT_ADDRESS,
@@ -37,17 +55,20 @@ export async function callRegisterProject(
   ngoWallet: string,
   amount: number,
   metadataUri: string,
-  certificateHash: string // Pastikan ini adalah bytes32 (diawali '0x...')
+  certificateHash: string
 ) {
   try {
-    const contract = await getCoreContract();
+    const contract = await getWriteContract(); // Butuh signer
     console.log("Mengirim transaksi registerProject...");
     
+    // Pastikan hash adalah 32 bytes
+    const formattedHash = ethers.zeroPadValue(ethers.hexlify(certificateHash), 32);
+
     const tx = await contract.registerProject(
       ngoWallet,
       amount,
       metadataUri,
-      ethers.zeroPadValue(certificateHash, 32) // Memastikan ini 32 bytes
+      formattedHash
     );
     
     await tx.wait(); // Menunggu transaksi dikonfirmasi
@@ -66,10 +87,10 @@ export async function callRegisterProject(
  */
 export async function callSetTokenPrice(
   projectId: number,
-  priceInWei: string // Kirim sebagai string untuk angka besar
+  priceInWei: string 
 ) {
   try {
-    const contract = await getCoreContract();
+    const contract = await getWriteContract(); // Butuh signer
     console.log(`Menetapkan harga untuk projectId ${projectId}...`);
 
     const tx = await contract.setTokenPrice(projectId, priceInWei);
@@ -91,17 +112,17 @@ export async function callSetTokenPrice(
 export async function callBuyTokens(
   projectId: number,
   amount: number,
-  totalCostInWei: string // Kirim sebagai string
+  totalCostInWei: string
 ) {
   try {
-    const contract = await getCoreContract();
+    const contract = await getWriteContract(); // Butuh signer
     console.log(`Membeli ${amount} token dari projectId ${projectId}...`);
 
     const tx = await contract.buyTokens(
       projectId,
       amount,
       {
-        value: totalCostInWei // Mengirim LSK/ETH bersama transaksi
+        value: totalCostInWei // Mengirim LSK/ETH
       }
     );
 
@@ -125,7 +146,7 @@ export async function callRetireTokens(
   retirementUri: string
 ) {
   try {
-    const contract = await getCoreContract();
+    const contract = await getWriteContract(); // Butuh signer
     console.log(`Membakar ${amount} token dari projectId ${projectId}...`);
 
     const tx = await contract.retireTokens(
@@ -139,6 +160,80 @@ export async function callRetireTokens(
     return tx.hash;
   } catch (error) {
     console.error("Gagal memanggil retireTokens:", error);
+    throw error;
+  }
+}
+
+
+// --- [FUNGSI FETCH DATA] ---
+// --- UNTUK FETCH DATA MARKETPLACE (READ-ONLY) ---
+
+/**
+ * [BARU] Mengambil detail satu proyek.
+ * Ini memanggil mapping 'projects' publik di kontrak.
+ */
+export async function callGetProjectDetails(projectId: number) {
+  try {
+    const contract = getReadOnlyContract(); // Tidak butuh signer
+    console.log(`Mengambil detail proyek #${projectId}...`);
+
+    const project = await contract.projects(projectId);
+
+    // Cek jika proyeknya ada (owner tidak 0x0)
+    if (project.owner === ethers.ZeroAddress) {
+      throw new Error(`Proyek dengan ID ${projectId} tidak ditemukan.`);
+    }
+
+    return {
+      projectId: projectId,
+      owner: project.owner,
+      priceInWei: project.priceInWei.toString(), // konversi BigInt ke string
+      metadataUri: project.metadataUri
+    };
+  } catch (error) {
+    console.error("Gagal mengambil detail proyek:", error);
+    throw error;
+  }
+}
+
+/**
+ * [BARU] Mengambil SEMUA proyek untuk halaman Marketplace.
+ * Ini adalah "fungsi" yang kita diskusikan.
+ */
+export async function callGetAllProjects() {
+  try {
+    const contract = getReadOnlyContract(); // Tidak butuh signer
+    console.log("Mengambil total jumlah proyek...");
+
+    // 1. Panggil counter untuk tahu total proyek
+    const projectCount = await contract.projectCount();
+    const projectCountNum = Number(projectCount); // Konversi BigInt ke angka
+
+    console.log(`Total proyek ditemukan: ${projectCountNum}`);
+
+    const allProjects = [];
+
+    // 2. Lakukan looping di frontend
+    for (let i = 1; i <= projectCountNum; i++) {
+      console.log(`Mengambil data proyek #${i}`);
+      // 3. Panggil detail setiap proyek satu per satu
+      const project = await contract.projects(i);
+      
+      // Kita hanya tambahkan proyek yang valid (jika owner-nya ada)
+      if (project.owner !== ethers.ZeroAddress) {
+        allProjects.push({
+          projectId: i,
+          owner: project.owner,
+          priceInWei: project.priceInWei.toString(),
+          metadataUri: project.metadataUri
+        });
+      }
+    }
+
+    // 4. Kembalikan array berisi semua data proyek
+    return allProjects;
+  } catch (error) {
+    console.error("Gagal mengambil semua proyek:", error);
     throw error;
   }
 }

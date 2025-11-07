@@ -75,11 +75,19 @@ async function main() {
     CarbonFiCoreArtifact.bytecode,
     signer
   );
+
+  // --- [FIX] ---
+  // Urutan argumen ditukar agar sesuai dengan constructor:
+  // 1. _certificateAddress
+  // 2. _tokenAddress
+  // 3. _proofAddress
   const carbonFiCore = await CarbonFiCoreFactory.deploy(
-    carbonTokenAddress,
-    projectCertificateAddress,
-    retiredProofAddress
+    projectCertificateAddress, // Argumen 1 (Sertifikat)
+    carbonTokenAddress,        // Argumen 2 (Token)
+    retiredProofAddress        // Argumen 3 (Bukti)
   );
+  // ---------------
+
   await carbonFiCore.waitForDeployment();
   const carbonFiCoreAddress = await carbonFiCore.getAddress();
   console.log(`✅ CarbonFiCore deployed at: ${carbonFiCoreAddress}\n`);

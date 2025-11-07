@@ -4,16 +4,16 @@ import CarbonTokenABI from './abi/CarbonToken.json';
 import ProjectCertificateABI from './abi/ProjectCertificate.json';
 import RetiredProofABI from './abi/RetiredProof.json';
 
-// --- ALAMAT KONTRAK (FINAL DEPLOYMENT) ---
+// --- ALAMAT KONTRAK (FINAL DEPLOYMENT V2.2) ---
 // Alamat-alamat ini sudah live di Lisk Sepolia
 
 // Kontrak Utama (Otak)
-export const CORE_CONTRACT_ADDRESS = "0xd91bA93114bB47c6C20bec08c20d36D195Cad29D";
+export const CORE_CONTRACT_ADDRESS = "0x1Bebc50E2A03e295Ae16A6a877e1B022903fA4b8";
 
 // Kontrak Token
-export const TOKEN_CONTRACT_ADDRESS = "0x32794DDB0B309f0eEC235d6434D064AccDB927a3";
-export const CERTIFICATE_CONTRACT_ADDRESS = "0x6C4668AB0679A4409b138e7F2bC6045a3D80f8e1";
-export const PROOF_CONTRACT_ADDRESS = "0x526c5935F5BAE0E97b207a0aFc5d07754C0148e8";
+export const TOKEN_CONTRACT_ADDRESS = "0x755705D35921E008B0C1aBB43719Af16BEd7D2f1";
+export const CERTIFICATE_CONTRACT_ADDRESS = "0x91edf5f53DF486220118dce53803Ec45b655B4cC";
+export const PROOF_CONTRACT_ADDRESS = "0x2A5a229DeB7c9ba6E67de2225276ef53963372C1";
 
 // --- ABI (PANDUAN FUNGSI) ---
 // Kita ambil hanya bagian '.abi' dari file JSON
