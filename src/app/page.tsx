@@ -1,27 +1,27 @@
+'use client';
+
 import HeroSection from "@/components/landing/HeroSection";
-import Navbar from "@/components/ui/Navbar";
-// import WalletConnectButton from '@/components/wallet-connect-button';
-// import { usePanna } from 'panna-sdk';
-// import { useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
-// import { Wallet } from 'lucide-react';
+import { usePanna } from 'panna-sdk';
+import { useRoleBasedRedirect } from '@/hooks/useRoleBasedRedirect';
 
 export default function Home() {
-  // const { wallet } = usePanna();
-  // const router = useRouter();
+  const { account } = usePanna();
+  const { isLoading } = useRoleBasedRedirect();
 
-  // useEffect(() => {
-  //   // Redirect to login if user is not connected
-  //   if (!wallet) {
-  //     router.push('/login');
-  //   }
-  // }, [wallet, router]);
+  // Debug: Log connected address
+  if (account?.address) {
+    console.log('✓ Wallet Connected - Address:', account.address);
+  }
 
-  // if (!wallet) {
-  //   return null; // Prevent flash of content
-  // }
+  // If wallet connected, hook will handle redirect
+  if (account) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p>{isLoading ? 'Checking your role...' : 'Redirecting...'}</p>
+      </div>
+    );
+  }
 
-  // const walletAddress = wallet?.address || 'N/A';
-  
+  // Show landing page if not connected
   return <HeroSection />;
 }
