@@ -57,8 +57,8 @@ export default {
 				carbon: {
 					light: '#FFFD8F',
 					medium: '#B0CE88',
-					primary: '#4C763B',
-					dark: '#043915'
+					primary: '#043915',
+					dark: '#4C763B'
 				}
 			},
 			borderRadius: {

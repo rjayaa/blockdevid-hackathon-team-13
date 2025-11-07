@@ -6,12 +6,16 @@ import { LoginButton } from 'panna-sdk'
 import { useActiveWallet, useDisconnect } from 'thirdweb/react'
 import Link from 'next/link'
 
+const VERIFICATOR_ADDRESS = '0x5B38Da6a701c568545dCfcB03FcB875f56beddC4'.toLowerCase();
+
 const Navbar = () => {
     const account = useActiveAccount()
     const wallet = useActiveWallet()
     const { disconnect } = useDisconnect()
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const dropdownRef = useRef<HTMLDivElement>(null)
+    const userAddress = account?.address?.toLowerCase() || '';
+    const isAdmin = userAddress === VERIFICATOR_ADDRESS;
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -26,43 +30,62 @@ const Navbar = () => {
     }, [])
 
     return (
-        <header className="flex justify-between items-center absolute top-5 px-8 w-full z-50">
-            <div className="text-lg tracking-wider px-3 py-1 bg-foreground text-carbon-medium rounded-sm">
+        <header className="flex justify-between items-center fixed top-5 px-8 w-full z-50">
+            <Link href="/" className="text-lg tracking-wider px-4 py-2 bg-foreground text-carbon-medium rounded-sm hover:bg-carbon-primary hover:text-carbon-light transition-colors duration-300">
                 CarbonFi
-            </div>
+            </Link>
 
-            <nav className="flex space-x-6 text-sm uppercase items-center">
-                <a href="#" className="hover:text-background hover:border-background border-b border-foreground pb-0.5 transition-colors">Dashboard</a>
-                <a href="#" className="hover:text-background transition-colors">Contact</a>
+            <nav className="flex space-x-6 text-sm uppercase items-center font-space">
+
+                {/* Navigation Links */}
+                {account && (
+                    <>
+                        <Link href="/dashboard" className="hover:text-carbon-primary transition-colors duration-200 border-b border-transparent hover:border-carbon-primary pb-0.5">
+                            Dashboard
+                        </Link>
+                        <Link href="/marketplace" className="hover:text-carbon-primary transition-colors duration-200 border-b border-transparent hover:border-carbon-primary pb-0.5">
+                            Marketplace
+                        </Link>
+                    </>
+                )}
+
+                {/* Admin Link (RBAC Simulation) */}
+                {isAdmin && (
+                    <Link href="/admin" className="text-destructive font-bold hover:text-destructive/80 transition-colors duration-200 border-b-2 border-destructive pb-0.5">
+                        Admin Portal
+                    </Link>
+                )}
 
                 {!account ? (
                     <div className="panna-login-button-wrapper">
                         <style>{`
-                            .panna-login-button-wrapper button {
-                                background-color: #4C763B !important;
-                                color: #B0CE88 !important;
-                                border: 2px solid #4C763B !important;
-                                padding: 8px 16px !important;
-                                border-radius: 4px !important;
-                                text-transform: uppercase !important;
-                                font-size: 14px !important;
-                                font-weight: 500 !important;
-                                letter-spacing: 0.05em !important;
-                                transition: all 0.3s ease !important;
-                            }
-                            .panna-login-button-wrapper button:hover {
-                                background-color: #B0CE88 !important;
-                                color: #4C763B !important;
-                                border-color: #B0CE88 !important;
-                            }
-                        `}</style>
+                        .panna-login-button-wrapper button {
+                            background-color: #043915 !important;
+                            color: #B0CE88 !important;
+                            border: 2px solid #043915 !important;
+                            padding: 4px 8px !important;
+                            border-radius: 4px !important;
+                            text-transform: uppercase !important;
+                            font-size: 14px !important;
+                            font-weight: 500 !important;
+                            letter-spacing: 0.05em !important;
+                            transition: all 0.3s ease !important;
+                            min-width: 100px !important;
+                            min-height: 32px !important;
+                        }
+                        .panna-login-button-wrapper button:hover {
+                            background-color: #B0CE88 !important;
+                            color: #043915 !important;
+                            border-color: #043915 !important;
+                        }
+                    `}</style>
                         <LoginButton />
                     </div>
                 ) : (
                     <div ref={dropdownRef} className="relative">
                         <button
                             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                            className="text-sm px-4 py-2 bg-carbon-medium text-carbon-primary rounded-sm border-2 border-carbon-medium uppercase tracking-wider font-medium cursor-pointer transition-opacity hover:opacity-80"
+                            className="text-sm px-4 py-2 text-foreground rounded-sm border-2 border-foreground uppercase tracking-wider font-medium cursor-pointer transition-opacity hover:opacity-80"
                         >
                             {account.address.slice(0, 6)}...{account.address.slice(-4)}
                         </button>
@@ -76,7 +99,7 @@ const Navbar = () => {
                                             setIsDropdownOpen(false)
                                         }
                                     }}
-                                    className="w-full text-left px-6 py-3 text-sm text-carbon-medium hover:bg-carbon-medium hover:text-carbon-primary uppercase tracking-wider font-medium transition-colors whitespace-nowrap"
+                                    className="w-full text-left px-6 py-3 text-sm text-carbon-medium hover:bg-carbon-medium hover:text-carbon-primary uppercase tracking-wider font-medium transition-colors foregroundspace-nowrap"
                                 >
                                     Logout
                                 </button>

@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import React from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const HalftoneGlobeDynamic = dynamic(
     () => import('@/components/ui/Globe'),
@@ -42,8 +43,8 @@ const HeroSection = () => {
                 <div className="self-start text-left w-full">
                     <h1 className="text-[8vh] leading-snug text-justify ">
                         Every breath hinges on a stable climate. <br />
-                        <span className='font-semibold border-b-4 border-foreground'>Carbon Fi</span> are tokenizing climate action to safeguard our shared future.
-                        <span className='text-[4vh] px-4 py-1 bg-transparent hover:bg-foreground hover:text-[#B0CE88] text-foreground border-2 border-foreground cursor-pointer ml-8 align-middle rounded-sm'>Get Started ⟶</span>
+                        <span className='font-semibold border-b-4 border-foreground'>PoRCE</span> are tokenizing climate action to safeguard our shared future.
+                        <Link href={"/dashboard"} className='text-[4vh] px-4 py-2 bg-transparent hover:bg-foreground hover:text-[#B0CE88] text-foreground border-4 border-foreground cursor-pointer ml-8 align-middle rounded-sm'>Get Started ⟶</Link>
                     </h1>
                 </div>
             </div>

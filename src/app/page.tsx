@@ -23,10 +23,5 @@ export default function Home() {
 
   // const walletAddress = wallet?.address || 'N/A';
   
-  return (
-    <div className="relative font-space">
-      <Navbar />
-      <HeroSection />
-    </div>
-  );
+  return <HeroSection />;
 }
