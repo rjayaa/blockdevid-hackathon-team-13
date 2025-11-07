@@ -123,7 +123,7 @@ export default function RetirementPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <p className="text-lg font-bold mb-2">⚠️ Wallet Not Connected</p>
-          <p className="text-sm text-foreground/60">
+          <p className="text-sm text-carbon-primary">
             Please connect your wallet first
           </p>
         </div>
@@ -135,30 +135,30 @@ export default function RetirementPage() {
   const projectDetails = getProjectDetails(tokenToRetire.tokenId);
 
   return (
-    <div className="container mx-auto pb-12 px-4 md:px-8">
+    <div className="pb-12 px-4 md:px-8">
       <div className="flex items-center gap-2 mb-6">
         <Link
-          href="/(main)/dashboard"
-          className="inline-flex items-center gap-1 text-sm text-carbon-primary hover:text-foreground transition-colors"
+          href="/dashboard"
+          className="inline-flex items-center gap-1 text-sm text-carbon-primary hover:text-carbon-primary transition-colors"
         >
           <ArrowLeft className="size-4" /> Back to Dashboard
         </Link>
       </div>
 
-      <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-destructive pb-2">
+      <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-primary pb-2">
         Retire Tokens{" "}
         <span className="text-carbon-medium text-xl">(BURN & NFT PROOF)</span>
       </h1>
-      <p className="text-sm text-foreground/80 mb-8 font-space">
+      <p className="text-sm text-carbon-primary/80 mb-8 font-space">
         Bakar token karbon Anda dan dapatkan Sertifikat Pensiun (NFT) sebagai
         bukti audit.
       </p>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <Card className="col-span-2 border-2 border-foreground bg-carbon-medium/30">
+        <Card className="col-span-2 border-2 border-carbon-primary bg-carbon-medium/30">
           <CardHeader>
-            <CardTitle className="text-xl uppercase font-bold text-foreground flex items-center gap-2">
-              <Flame className="size-6 text-destructive" /> Retire Tokens Form
+            <CardTitle className="text-xl uppercase font-bold text-carbon-primary flex items-center gap-2">
+              <Flame className="size-6 text-primary" /> Retire Tokens Form
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -180,7 +180,7 @@ export default function RetirementPage() {
 
             <form onSubmit={handleRetire} className="space-y-6">
               {/* Project ID */}
-              <div className="space-y-4 p-4 border border-foreground/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50">
                 <Label htmlFor="projectId" className="uppercase font-semibold">
                   Project ID
                 </Label>
@@ -188,7 +188,7 @@ export default function RetirementPage() {
                   id="projectId"
                   type="number"
                   placeholder="1"
-                  className="bg-foreground border-foreground"
+                  className="bg-carbon-primary border-carbon-primary text-carbon-light"
                   value={formData.projectId}
                   onChange={handleInputChange}
                   disabled={isLoading}
@@ -196,7 +196,7 @@ export default function RetirementPage() {
               </div>
 
               {/* Amount */}
-              <div className="space-y-4 p-4 border border-foreground/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50">
                 <Label htmlFor="amount" className="uppercase font-semibold">
                   Jumlah Token yang Di-Retire (Burn)
                 </Label>
@@ -204,18 +204,18 @@ export default function RetirementPage() {
                   id="amount"
                   type="number"
                   placeholder="1000"
-                  className="bg-foreground border-foreground"
+                  className="bg-carbon-primary border-carbon-primary text-carbon-light"
                   value={formData.amount}
                   onChange={handleInputChange}
                   disabled={isLoading}
                 />
-                <p className="text-xs text-foreground/60 italic">
+                <p className="text-xs text-carbon-primary italic">
                   ⚠️ Token akan dibakar (burned) dan tidak bisa dikembalikan
                 </p>
               </div>
 
               {/* Retirement URI */}
-              <div className="space-y-4 p-4 border border-foreground/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50">
                 <Label
                   htmlFor="retirementUri"
                   className="uppercase font-semibold flex items-center gap-2"
@@ -225,12 +225,12 @@ export default function RetirementPage() {
                 <Textarea
                   id="retirementUri"
                   placeholder="ipfs://QmProof123... (link ke dokumen pensiun/audit)"
-                  className="bg-foreground border-foreground text-foreground"
+                  className="bg-carbon-primary border-carbon-primary text-carbon-light"
                   value={formData.retirementUri}
                   onChange={handleInputChange}
                   disabled={isLoading}
                 />
-                <p className="text-xs text-foreground/60 italic">
+                <p className="text-xs text-carbon-primary italic">
                   Link ke dokumen pensiun di IPFS (sertifikat, audit report,
                   dll)
                 </p>
@@ -239,28 +239,28 @@ export default function RetirementPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-destructive text-foreground hover:bg-destructive/90 uppercase font-extrabold tracking-widest border-2 border-foreground hover:border-destructive disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-carbon-primary text-carbon-light hover:bg-carbon-primary/90 uppercase font-semibold tracking-widest border-2 border-carbon-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "⏳ Processing..." : "🔥 Retire & Burn Tokens"}
+                {isLoading ? "Processing..." : "Retire & Burn Tokens"}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 border-2 border-foreground">
+        <Card className="col-span-1 border-2 border-carbon-primary bg-carbon-light/50">
           <CardHeader>
             <CardTitle className="uppercase font-bold flex items-center gap-2">
-              <Flame className="size-5 text-destructive" /> Retire Info
+              <Flame className="size-5 text-primary" /> Retire Info
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div>
-              <p className="font-semibold text-destructive">⚠️ Warning:</p>
+              <p className="font-semibold text-primary">⚠️ Warning:</p>
               <p className="text-xs mt-1">
                 Token yang di-retire AKAN DIBAKAR dan tidak bisa dikembalikan!
               </p>
             </div>
-            <Separator className="bg-foreground/50" />
+            <Separator className="bg-carbon-primary/50" />
             <div>
               <p className="font-semibold">Proses Retire:</p>
               <ol className="list-decimal list-inside text-xs space-y-1 mt-1 ml-2">
@@ -272,7 +272,7 @@ export default function RetirementPage() {
                 <li>Dapatkan Sertifikat Pensiun (NFT)</li>
               </ol>
             </div>
-            <Separator className="bg-foreground/50" />
+            <Separator className="bg-carbon-primary/50" />
             <div>
               <p className="font-semibold">Output:</p>
               <p className="text-xs mt-1">
