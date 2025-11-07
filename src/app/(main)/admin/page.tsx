@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DollarSign, Upload, ShieldCheck, Zap, AlertCircle, CheckCircle } from "lucide-react";
+import { DollarSign, Upload, ShieldCheck, Zap, AlertCircle, CheckCircle, Tag } from "lucide-react";
 import { useActiveAccount } from "panna-sdk";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { callRegisterProject } from "@/lib/web3Actions";
+import { callRegisterProject, callSetTokenPrice } from "@/lib/web3Actions";
 import { ethers } from "ethers";
 
 // Admin address - sama dengan Navbar
@@ -24,7 +24,7 @@ export default function AdminDashboard() {
   const [isVerifier, setIsVerifier] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
-  // Form states
+  // Form states - Register Project
   const [formData, setFormData] = useState({
     amount: "",
     ngoWallet: "",
@@ -33,6 +33,16 @@ export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  // Form states - Set Token Price
+  const [priceFormData, setPriceFormData] = useState({
+    projectId: "",
+    priceValue: "",
+    priceUnit: "eth", // "wei", "gwei", "eth"
+  });
+  const [isPriceLoading, setIsPriceLoading] = useState(false);
+  const [priceSuccessMessage, setPriceSuccessMessage] = useState("");
+  const [priceErrorMessage, setPriceErrorMessage] = useState("");
 
   useEffect(() => {
     function verifyRole() {
@@ -187,6 +197,96 @@ export default function AdminDashboard() {
     }
   };
 
+  const handlePriceInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setPriceFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  // Function to convert price to Wei based on unit
+  const convertToWei = (value: string, unit: string): string => {
+    if (!value) return "0";
+    try {
+      switch (unit) {
+        case "wei":
+          return value; // Already in Wei
+        case "gwei":
+          return ethers.parseUnits(value, "gwei").toString();
+        case "eth":
+          return ethers.parseEther(value).toString();
+        default:
+          return "0";
+      }
+    } catch (error) {
+      console.error("Error converting to Wei:", error);
+      return "0";
+    }
+  };
+
+  // Function to display price in Wei
+  const getPriceInWei = (): string => {
+    return convertToWei(priceFormData.priceValue, priceFormData.priceUnit);
+  };
+
+  const handleSetPrice = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPriceErrorMessage("");
+    setPriceSuccessMessage("");
+    setIsPriceLoading(true);
+
+    try {
+      // Validate form
+      if (!priceFormData.projectId || !priceFormData.priceValue) {
+        throw new Error("Project ID dan Price harus diisi");
+      }
+
+      if (!account?.address) {
+        throw new Error("Wallet tidak terdeteksi");
+      }
+
+      console.log("💰 Setting token price with data:", priceFormData);
+
+      // Get signer
+      if (typeof window === "undefined" || !(window as any).ethereum) {
+        throw new Error("MetaMask/Panna wallet not detected");
+      }
+
+      const provider = new ethers.BrowserProvider((window as any).ethereum);
+      const signer = await provider.getSigner();
+      console.log("✓ Signer obtained from connected wallet");
+
+      // Convert to Wei based on selected unit
+      const priceInWei = convertToWei(priceFormData.priceValue, priceFormData.priceUnit);
+      console.log(`💰 Converting ${priceFormData.priceValue} ${priceFormData.priceUnit.toUpperCase()} to Wei:`, priceInWei);
+
+      // Call smart contract function
+      const txHash = await callSetTokenPrice(
+        signer,
+        parseInt(priceFormData.projectId),
+        priceInWei
+      );
+
+      // Success
+      setPriceSuccessMessage(`✓ Token price set successfully! TX: ${txHash}`);
+      console.log("✓ Transaction successful:", txHash);
+
+      // Reset form
+      setPriceFormData({
+        projectId: "",
+        priceValue: "",
+        priceUnit: "eth",
+      });
+    } catch (error: any) {
+      const errorMsg = error?.message || "Unknown error occurred";
+      console.error("❌ Error setting token price:", error);
+      setPriceErrorMessage(`Error: ${errorMsg}`);
+    } finally {
+      setIsPriceLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto pb-12 px-4 md:px-8">
       <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-foreground pb-2">
@@ -299,6 +399,127 @@ export default function AdminDashboard() {
               <li>`registerProject` (Mint ERC-1155 Token + NFT Proyek)</li>
               <li>`setTokenPrice` (Tetapkan Harga Jual)</li>
             </ul>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* SET TOKEN PRICE SECTION */}
+      <div className="mt-12 grid lg:grid-cols-3 gap-8">
+        <Card className="col-span-2 border-2 border-foreground bg-carbon-medium/30">
+          <CardHeader>
+            <CardTitle className="text-xl uppercase font-bold text-foreground flex items-center gap-2">
+              <Tag className="size-6 text-carbon-primary" /> Tetapkan Harga Token
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {/* Success Message */}
+            {priceSuccessMessage && (
+              <div className="mb-6 p-4 bg-green-900/30 border border-green-600 rounded-sm flex items-gap-2">
+                <CheckCircle className="size-5 text-green-600 mr-2 flex-shrink-0" />
+                <p className="text-sm text-green-600">{priceSuccessMessage}</p>
+              </div>
+            )}
+
+            {/* Error Message */}
+            {priceErrorMessage && (
+              <div className="mb-6 p-4 bg-red-900/30 border border-red-600 rounded-sm flex items-gap-2">
+                <AlertCircle className="size-5 text-red-600 mr-2 flex-shrink-0" />
+                <p className="text-sm text-red-600">{priceErrorMessage}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSetPrice} className="space-y-6">
+              {/* Project ID & Price */}
+              <div className="space-y-4 p-4 border border-foreground/50 bg-carbon-light/50">
+                <Label htmlFor="projectId" className="uppercase font-semibold">
+                  Project ID
+                </Label>
+                <Input
+                  id="projectId"
+                  type="number"
+                  placeholder="1"
+                  className="bg-foreground border-foreground"
+                  value={priceFormData.projectId}
+                  onChange={handlePriceInputChange}
+                  disabled={isPriceLoading}
+                />
+
+                <Label className="uppercase font-semibold">
+                  Harga per Token
+                </Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="priceValue"
+                    type="number"
+                    placeholder="0.001"
+                    step="0.000001"
+                    className="bg-foreground border-foreground flex-1"
+                    value={priceFormData.priceValue}
+                    onChange={handlePriceInputChange}
+                    disabled={isPriceLoading}
+                  />
+                  <select
+                    id="priceUnit"
+                    value={priceFormData.priceUnit}
+                    onChange={handlePriceInputChange}
+                    disabled={isPriceLoading}
+                    className="bg-foreground border-2 border-foreground px-3 py-2 rounded-sm text-carbon-medium uppercase font-semibold cursor-pointer"
+                  >
+                    <option value="wei">Wei</option>
+                    <option value="gwei">Gwei</option>
+                    <option value="eth">ETH</option>
+                  </select>
+                </div>
+
+                {/* Price Preview */}
+                {priceFormData.priceValue && (
+                  <div className="mt-3 p-3 bg-carbon-primary/20 border border-carbon-primary rounded-sm">
+                    <p className="text-xs text-foreground/70 mb-1">Preview Harga dalam Wei:</p>
+                    <p className="text-sm font-mono text-carbon-primary font-bold break-all">
+                      {getPriceInWei()}
+                    </p>
+                  </div>
+                )}
+
+                <p className="text-xs text-foreground/60 italic mt-2">
+                  Conversion Reference: 1 ETH = 10^18 Wei, 1 Gwei = 10^9 Wei
+                </p>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isPriceLoading}
+                className="w-full bg-carbon-primary text-carbon-medium hover:bg-carbon-primary/90 uppercase font-extrabold tracking-widest border-2 border-foreground hover:border-carbon-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isPriceLoading ? "⏳ Processing..." : "💰 Set Token Price"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-1 border-2 border-foreground">
+          <CardHeader>
+            <CardTitle className="uppercase font-bold flex items-center gap-2">
+              <DollarSign className="size-5" /> Price Info
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3 text-sm">
+            <div>
+              <p className="font-semibold text-carbon-primary">Conversion Reference:</p>
+              <p className="text-xs mt-1 font-mono">0.001 ETH = 1000000000000000 Wei</p>
+              <p className="text-xs font-mono">0.0001 ETH = 100000000000000 Wei</p>
+              <p className="text-xs font-mono">0.00001 ETH = 10000000000000 Wei</p>
+            </div>
+            <Separator className="bg-foreground/50" />
+            <div>
+              <p className="font-semibold">Langkah:</p>
+              <ol className="list-decimal list-inside text-xs space-y-1 mt-1 ml-2">
+                <li>Input Project ID (dari registerProject)</li>
+                <li>Input harga dalam ETH</li>
+                <li>Submit transaction</li>
+                <li>Confirm di MetaMask</li>
+              </ol>
+            </div>
           </CardContent>
         </Card>
       </div>
