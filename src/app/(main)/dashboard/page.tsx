@@ -7,6 +7,7 @@ import { DUMMY_CERTIFICATES, DUMMY_USER_TOKENS, Project, DUMMY_PROJECTS, Certifi
 import { ArrowRight, Globe, Lock, Leaf, X } from 'lucide-react';
 import { UserAsset } from '@/lib/types';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const DUMMY_USER_ADDRESS = '0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2'; // NGO A or Company B
 
@@ -17,12 +18,13 @@ const getProjectDetails = (tokenId: number): Project | undefined => {
 
 // Asset Card Component
 const AssetCard = ({ asset }: { asset: UserAsset }) => {
+    const router = useRouter()
     const project = getProjectDetails(asset.tokenId);
     
     if (!project) return null;
 
     return (
-        <Card className="border-2 border-foreground hover:shadow-2xl transition-all bg-carbon-medium/50">
+        <Card className="border-2 border-foreground hover:shadow-2xl transition-all bg-carbon-medium/70">
             <CardHeader>
                 <CardTitle className="uppercase text-lg font-bold tracking-wider">{project.name}</CardTitle>
                 <CardDescription className="text-sm text-foreground/80 font-space">{project.location}</CardDescription>
@@ -32,13 +34,14 @@ const AssetCard = ({ asset }: { asset: UserAsset }) => {
                 <p className="text-xs text-foreground/70 mt-1">{project.type}</p>
             </CardContent>
             <CardFooter className="flex justify-between pt-4">
-                <Button variant="default" className="bg-carbon-primary text-carbon-medium hover:bg-carbon-primary/90 uppercase text-xs font-bold">
+                <div></div>
+                {/* <Button variant="default" className="bg-carbon-primary text-carbon-medium hover:bg-carbon-primary/90 uppercase text-xs font-bold">
                     <ArrowRight className="size-4" /> Jual di Market (V2)
-                </Button>
+                </Button> */}
                 <Button 
                     variant="outline" 
-                    className="border-2 border-foreground bg-carbon-light hover:bg-carbon-medium uppercase text-xs font-bold"
-                    onClick={() => { alert(`Redirecting to /retire?token=${asset.tokenId}`)}}
+                    className="border-2 border-foreground bg-transparent hover:bg-carbon-medium uppercase text-xs font-bold"
+                    onClick={() => { router.push("/retire") }}
                 >
                     Retire Tokens
                 </Button>
@@ -54,8 +57,8 @@ const CertificateCard = ({ cert }: { cert: Certificate }) => {
     const certTypeStyle = isRetired ? 'bg-destructive text-foreground border-destructive' : 'bg-carbon-primary text-carbon-medium border-carbon-primary';
 
     return (
-        <Card className="border-2 border-foreground bg-carbon-light hover:shadow-xl transition-all">
-            <CardHeader className="p-4 border-b-2 border-foreground/50">
+        <Card className="border-2 border-foreground bg-carbon-medium/70 hover:shadow-xl transition-all">
+            <CardHeader className="p-4 border-b-2 border-carbon-primary">
                 <CardTitle className="text-lg font-extrabold flex items-center gap-2">
                     <Icon className={`size-5 p-0.5 rounded-sm ${certTypeStyle}`} />
                     {cert.type === 'Pensiun' ? 'Sertifikat Penebusan' : 'Sertifikat Proyek'}
@@ -90,7 +93,7 @@ export default function UserDashboard() {
         <h2 className="text-2xl font-bold uppercase mb-4 flex items-center gap-2">
             <Globe className="size-6" /> Token Kredit Karbon (ERC-1155)
         </h2>
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
             {DUMMY_USER_TOKENS.map((asset) => (
                 <AssetCard key={asset.tokenId} asset={asset} />
             ))}
@@ -102,7 +105,7 @@ export default function UserDashboard() {
         <h2 className="text-2xl font-bold uppercase mb-4 flex items-center gap-2">
             <X className="size-6" /> Sertifikat Bukti (NFT)
         </h2>
-        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
             {DUMMY_CERTIFICATES.map((cert) => (
                 <CertificateCard key={cert.certId} cert={cert} />
             ))}

@@ -76,7 +76,7 @@ export default function AdminDashboard() {
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-                <p className="text-sm">Anda memiliki peran **VERIFIER_ROLE** di kontrak Core.</p>
+                <p className="text-sm">Anda memiliki peranVERIFIER_ROLEdi kontrak Core.</p>
                 <Separator className="bg-foreground/50"/>
                 <p className="text-sm">**Aksi On-Chain:**</p>
                 <ul className="list-disc list-inside text-sm space-y-1 ml-4">
