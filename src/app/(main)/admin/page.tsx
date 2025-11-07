@@ -6,7 +6,15 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { DollarSign, Upload, ShieldCheck, Zap, AlertCircle, CheckCircle, Tag } from "lucide-react";
+import {
+  DollarSign,
+  Upload,
+  ShieldCheck,
+  Zap,
+  AlertCircle,
+  CheckCircle,
+  Tag,
+} from "lucide-react";
 import { useActiveAccount } from "panna-sdk";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -14,9 +22,10 @@ import { callRegisterProject, callSetTokenPrice } from "@/lib/web3Actions";
 import { ethers } from "ethers";
 
 // Admin address - sama dengan Navbar
-const VERIFICATOR_ADDRESS = "0x14C7F1d75e8B74618D77E6eE5A830EeE7D7FB64F".toLowerCase();
+const VERIFICATOR_ADDRESS =
+  "0x14C7F1d75e8B74618D77E6eE5A830EeE7D7FB64F".toLowerCase();
 
-const DUMMY_ADMIN_ADDRESS = "0x00000"
+const DUMMY_ADMIN_ADDRESS = "0x00000";
 
 export default function AdminDashboard() {
   const account = useActiveAccount();
@@ -65,9 +74,7 @@ export default function AdminDashboard() {
         console.log("   🌐 Expected Network: 4202 (Lisk Sepolia)");
 
         if (chainIdNum !== 4202) {
-          console.warn(
-            "⚠️ WRONG NETWORK! Expected Lisk Sepolia (4202)"
-          );
+          console.warn("⚠️ WRONG NETWORK! Expected Lisk Sepolia (4202)");
         }
       }
 
@@ -79,7 +86,7 @@ export default function AdminDashboard() {
       if (!isAdmin) {
         console.warn("❌ Access Denied: User is not the admin");
         setTimeout(() => {
-          router.push("/(main)/dashboard");
+          router.push("/dashboard");
         }, 1500);
       } else {
         console.log("✅ Access Granted: User is admin");
@@ -96,7 +103,9 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <p className="text-lg font-bold mb-2">⏳ Verifying admin access...</p>
-          <p className="text-sm text-foreground/60">Checking VERIFIER_ROLE in smart contract...</p>
+          <p className="text-sm text-foreground/60">
+            Checking VERIFIER_ROLE in smart contract...
+          </p>
         </div>
       </div>
     );
@@ -107,7 +116,9 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <p className="text-lg font-bold mb-2">❌ Access Denied</p>
-          <p className="text-sm text-foreground/60">You don't have VERIFIER_ROLE. Redirecting to dashboard...</p>
+          <p className="text-sm text-foreground/60">
+            You don't have VERIFIER_ROLE. Redirecting to dashboard...
+          </p>
         </div>
       </div>
     );
@@ -118,7 +129,9 @@ export default function AdminDashboard() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <p className="text-lg font-bold mb-2">⚠️ Wallet Not Connected</p>
-          <p className="text-sm text-foreground/60">Please connect your wallet first</p>
+          <p className="text-sm text-foreground/60">
+            Please connect your wallet first
+          </p>
         </div>
       </div>
     );
@@ -141,11 +154,15 @@ export default function AdminDashboard() {
     try {
       // Validate form
       if (!formData.amount || !formData.ngoWallet || !formData.metadataUri) {
-        throw new Error("Semua field (Amount, NGO Wallet, Metadata URI) harus diisi");
+        throw new Error(
+          "Semua field (Amount, NGO Wallet, Metadata URI) harus diisi",
+        );
       }
 
       if (!account?.address) {
-        throw new Error("Wallet tidak terdeteksi. Pastikan sudah connect dengan Panna SDK");
+        throw new Error(
+          "Wallet tidak terdeteksi. Pastikan sudah connect dengan Panna SDK",
+        );
       }
 
       console.log("📝 Registering project with data:", formData);
@@ -165,7 +182,9 @@ export default function AdminDashboard() {
         timestamp: Date.now(),
         nonce: Math.random(),
       });
-      const certificateHash = ethers.keccak256(ethers.toUtf8Bytes(certificateData));
+      const certificateHash = ethers.keccak256(
+        ethers.toUtf8Bytes(certificateData),
+      );
 
       console.log("🔐 Generated Certificate Hash:", certificateHash);
 
@@ -175,7 +194,7 @@ export default function AdminDashboard() {
         formData.ngoWallet,
         parseInt(formData.amount),
         formData.metadataUri,
-        certificateHash
+        certificateHash,
       );
 
       // Success
@@ -197,7 +216,9 @@ export default function AdminDashboard() {
     }
   };
 
-  const handlePriceInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handlePriceInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { id, value } = e.target;
     setPriceFormData((prev) => ({
       ...prev,
@@ -258,14 +279,20 @@ export default function AdminDashboard() {
       console.log("✓ Signer obtained from connected wallet");
 
       // Convert to Wei based on selected unit
-      const priceInWei = convertToWei(priceFormData.priceValue, priceFormData.priceUnit);
-      console.log(`💰 Converting ${priceFormData.priceValue} ${priceFormData.priceUnit.toUpperCase()} to Wei:`, priceInWei);
+      const priceInWei = convertToWei(
+        priceFormData.priceValue,
+        priceFormData.priceUnit,
+      );
+      console.log(
+        `💰 Converting ${priceFormData.priceValue} ${priceFormData.priceUnit.toUpperCase()} to Wei:`,
+        priceInWei,
+      );
 
       // Call smart contract function
       const txHash = await callSetTokenPrice(
         signer,
         parseInt(priceFormData.projectId),
-        priceInWei
+        priceInWei,
       );
 
       // Success
@@ -294,7 +321,8 @@ export default function AdminDashboard() {
         <span className="text-carbon-medium text-xl">(VERIFICATOR)</span>
       </h1>
       <p className="text-sm text-foreground/80 mb-8 font-space">
-        Address: {account?.address?.slice(0, 10)}...{account?.address?.slice(-8)} (Role: Verificator)
+        Address: {account?.address?.slice(0, 10)}...
+        {account?.address?.slice(-8)} (Role: Verificator)
       </p>
 
       <div className="grid lg:grid-cols-3 gap-8">
@@ -368,7 +396,8 @@ export default function AdminDashboard() {
                   disabled={isLoading}
                 />
                 <p className="text-xs text-foreground/60 italic">
-                  Masukkan IPFS hash placeholder untuk sementara. Nanti akan diganti dengan real IPFS hash saat integrasi selesai.
+                  Masukkan IPFS hash placeholder untuk sementara. Nanti akan
+                  diganti dengan real IPFS hash saat integrasi selesai.
                 </p>
               </div>
 
@@ -408,7 +437,8 @@ export default function AdminDashboard() {
         <Card className="col-span-2 border-2 border-foreground bg-carbon-medium/30">
           <CardHeader>
             <CardTitle className="text-xl uppercase font-bold text-foreground flex items-center gap-2">
-              <Tag className="size-6 text-carbon-primary" /> Tetapkan Harga Token
+              <Tag className="size-6 text-carbon-primary" /> Tetapkan Harga
+              Token
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -474,7 +504,9 @@ export default function AdminDashboard() {
                 {/* Price Preview */}
                 {priceFormData.priceValue && (
                   <div className="mt-3 p-3 bg-carbon-primary/20 border border-carbon-primary rounded-sm">
-                    <p className="text-xs text-foreground/70 mb-1">Preview Harga dalam Wei:</p>
+                    <p className="text-xs text-foreground/70 mb-1">
+                      Preview Harga dalam Wei:
+                    </p>
                     <p className="text-sm font-mono text-carbon-primary font-bold break-all">
                       {getPriceInWei()}
                     </p>
@@ -505,10 +537,18 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <div>
-              <p className="font-semibold text-carbon-primary">Conversion Reference:</p>
-              <p className="text-xs mt-1 font-mono">0.001 ETH = 1000000000000000 Wei</p>
-              <p className="text-xs font-mono">0.0001 ETH = 100000000000000 Wei</p>
-              <p className="text-xs font-mono">0.00001 ETH = 10000000000000 Wei</p>
+              <p className="font-semibold text-carbon-primary">
+                Conversion Reference:
+              </p>
+              <p className="text-xs mt-1 font-mono">
+                0.001 ETH = 1000000000000000 Wei
+              </p>
+              <p className="text-xs font-mono">
+                0.0001 ETH = 100000000000000 Wei
+              </p>
+              <p className="text-xs font-mono">
+                0.00001 ETH = 10000000000000 Wei
+              </p>
             </div>
             <Separator className="bg-foreground/50" />
             <div>
