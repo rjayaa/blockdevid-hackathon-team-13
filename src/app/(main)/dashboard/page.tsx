@@ -4,7 +4,7 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DUMMY_CERTIFICATES, DUMMY_USER_TOKENS, Project, DUMMY_PROJECTS, Certificate } from '@/lib/types';
-import { ArrowRight, Globe, Lock, Leaf, X } from 'lucide-react';
+import { ArrowRight, Globe, Lock, Leaf, X, Loader2 } from 'lucide-react';
 import { UserAsset } from '@/lib/types';
 import Link from 'next/link';
 import { useActiveAccount } from 'panna-sdk';
@@ -21,7 +21,7 @@ const getProjectDetails = (tokenId: number): Project | undefined => {
 const AssetCard = ({ asset }: { asset: UserAsset }) => {
     const router = useRouter()
     const project = getProjectDetails(asset.tokenId);
-    
+
     if (!project) return null;
 
     return (
@@ -36,11 +36,8 @@ const AssetCard = ({ asset }: { asset: UserAsset }) => {
             </CardContent>
             <CardFooter className="flex justify-between pt-4">
                 <div></div>
-                {/* <Button variant="default" className="bg-carbon-primary text-carbon-medium hover:bg-carbon-primary/90 uppercase text-xs font-bold">
-                    <ArrowRight className="size-4" /> Jual di Market (V2)
-                </Button> */}
-                <Button 
-                    variant="outline" 
+                <Button
+                    variant="outline"
                     className="border-2 border-foreground bg-transparent hover:bg-carbon-medium uppercase text-xs font-bold"
                     onClick={() => { router.push("/retire") }}
                 >

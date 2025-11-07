@@ -7,9 +7,9 @@ import RetiredProofABI from "./abi/RetiredProof.json";
 // --- ALAMAT KONTRAK (FINAL DEPLOYMENT V2.2) ---
 // Alamat-alamat ini sudah live di Lisk Sepolia
 
-// Kontrak Utama (Otak) - v2.2 dengan struct Project
+// Kontrak Utama (Otak) - v2.3 dengan user purchase tracking dan getProjectsByUserAddress()
 export const CORE_CONTRACT_ADDRESS =
-  "0x1Bebc50E2A03e295Ae16A6a877e1B022903fA4b8";
+  "0x67dd848255872A1E4E65ad39e15dC56102f68934";
 
 // Kontrak Token
 export const TOKEN_CONTRACT_ADDRESS =

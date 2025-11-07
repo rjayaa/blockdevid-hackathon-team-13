@@ -29,6 +29,12 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
     mapping(uint256 => Project) public projects;
     // --- [SELESAI BARU] ---
 
+    // --- [BARU v2.3] ---
+    // Tracking user purchases untuk getProjectsByUserAddress()
+    mapping(address user => uint256[] projectIds) public userPurchasedProjects;
+    mapping(address user => mapping(uint256 projectId => bool)) public hasUserBought;
+    // --- [SELESAI BARU v2.3] ---
+
 
     // --- [HAPUS] ---
     // Kita tidak perlu mapping terpisah lagi
@@ -138,10 +144,16 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
         // 2. EFFECTS
         tokenContract.safeTransferFrom(address(this), msg.sender, projectId, amount, "");
 
+        // 2.5. TRACK USER PURCHASE [NEW v2.3]
+        if (!hasUserBought[msg.sender][projectId]) {
+            userPurchasedProjects[msg.sender].push(projectId);
+            hasUserBought[msg.sender][projectId] = true;
+        }
+
         // 3. INTERACTIONS
         (bool success, ) = seller.call{value: totalCost}("");
         require(success, "Payment to NGO failed");
-        
+
         emit TokensPurchased(projectId, msg.sender, seller, amount, totalCost);
     }
 
@@ -152,6 +164,17 @@ contract CarbonFiCore is AccessControl, ERC1155Holder {
         proofContract.safeMint(msg.sender, retirementUri);
         emit TokensRetired(projectId, msg.sender, amount);
     }
+
+    // --- [BARU v2.3] ---
+    /**
+     * @dev Mendapatkan semua project yang pernah dibeli oleh user
+     * @param user Address dari user
+     * @return Array dari project IDs yang user beli
+     */
+    function getProjectsByUserAddress(address user) external view returns (uint256[] memory) {
+        return userPurchasedProjects[user];
+    }
+    // --- [SELESAI BARU v2.3] ---
 
     // ... (supportsInterface tetap sama) ...
     function supportsInterface(bytes4 interfaceId) public view override(AccessControl, ERC1155Holder) returns (bool) {
