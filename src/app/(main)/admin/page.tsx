@@ -56,15 +56,11 @@ export default function AdminDashboard() {
   useEffect(() => {
     function verifyRole() {
       if (!account?.address) {
-        console.log("⚠️ No account address found");
         setIsChecking(false);
         return;
       }
 
       const userAddress = account.address.toLowerCase();
-      console.log("🔍 [Admin Page] Verifying VERIFIER_ROLE");
-      console.log("   User Address:", userAddress);
-      console.log("   Expected Address:", VERIFICATOR_ADDRESS);
 
       // Log network info
       if (typeof window !== "undefined" && (window as any).ethereum) {
@@ -315,7 +311,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto pb-12 px-4 md:px-8">
+    <div className="pb-12 px-4 md:px-8">
       <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-foreground pb-2">
         Dashboard Proyek{" "}
         <span className="text-carbon-medium text-xl">(VERIFICATOR)</span>
@@ -343,16 +339,16 @@ export default function AdminDashboard() {
             )}
 
             {/* Error Message */}
-            {errorMessage && (
+            {/* {errorMessage && (
               <div className="mb-6 p-4 bg-red-900/30 border border-red-600 rounded-sm flex items-gap-2">
                 <AlertCircle className="size-5 text-red-600 mr-2 flex-shrink-0" />
                 <p className="text-sm text-red-600">{errorMessage}</p>
               </div>
-            )}
+            )} */}
 
             <form onSubmit={handleMint} className="space-y-6">
               {/* Project Registration Fields */}
-              <div className="space-y-4 p-4 border border-foreground/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-primary/50 bg-carbon-light/50 rounded-md">
                 <Label htmlFor="amount" className="uppercase font-semibold">
                   CO2 Amount (Ton) - Token Supply
                 </Label>
@@ -360,7 +356,7 @@ export default function AdminDashboard() {
                   id="amount"
                   type="number"
                   placeholder="5000"
-                  className="bg-foreground border-foreground"
+                  className="bg-foreground border-foreground text-carbon-primary"
                   value={formData.amount}
                   onChange={handleInputChange}
                   disabled={isLoading}
@@ -372,7 +368,7 @@ export default function AdminDashboard() {
                 <Input
                   id="ngoWallet"
                   placeholder="0x..."
-                  className="bg-foreground border-foreground"
+                  className="bg-foreground border-foreground text-carbon-primary"
                   value={formData.ngoWallet}
                   onChange={handleInputChange}
                   disabled={isLoading}
@@ -380,7 +376,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Metadata */}
-              <div className="space-y-4 p-4 border border-foreground/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-primary/50 bg-carbon-light/50 rounded-md">
                 <Label
                   htmlFor="metadataUri"
                   className="uppercase font-semibold flex items-center gap-2"
@@ -390,7 +386,7 @@ export default function AdminDashboard() {
                 <Input
                   id="metadataUri"
                   placeholder="ipfs://QmTest123... (placeholder sementara)"
-                  className="bg-foreground border-foreground"
+                  className="bg-foreground border-foreground text-carbon-primary"
                   value={formData.metadataUri}
                   onChange={handleInputChange}
                   disabled={isLoading}
@@ -406,13 +402,13 @@ export default function AdminDashboard() {
                 disabled={isLoading}
                 className="w-full bg-carbon-primary text-carbon-medium hover:bg-carbon-primary/90 uppercase font-extrabold tracking-widest border-2 border-foreground hover:border-carbon-primary disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLoading ? "⏳ Processing..." : "📝 Register Project"}
+                {isLoading ? "Processing..." : "Register Project"}
               </Button>
             </form>
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 border-2 border-foreground">
+        <Card className="col-span-1 border-2 border-foreground bg-carbon-light/50">
           <CardHeader>
             <CardTitle className="uppercase font-bold flex items-center gap-2">
               <ShieldCheck className="size-5" /> Status Verifikator
@@ -420,10 +416,10 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="text-sm">
-              Anda memiliki peran **VERIFIER_ROLE** di kontrak Core.
+              Anda memiliki peran VERIFIER_ROLE di kontrak Core.
             </p>
             <Separator className="bg-foreground/50" />
-            <p className="text-sm">**Aksi On-Chain:**</p>
+            <p className="text-sm">Aksi On-Chain:</p>
             <ul className="list-disc list-inside text-sm space-y-1 ml-4">
               <li>`registerProject` (Mint ERC-1155 Token + NFT Proyek)</li>
               <li>`setTokenPrice` (Tetapkan Harga Jual)</li>
@@ -460,7 +456,7 @@ export default function AdminDashboard() {
 
             <form onSubmit={handleSetPrice} className="space-y-6">
               {/* Project ID & Price */}
-              <div className="space-y-4 p-4 border border-foreground/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-primary/50 bg-carbon-light/50 rounded-sm">
                 <Label htmlFor="projectId" className="uppercase font-semibold">
                   Project ID
                 </Label>
@@ -468,7 +464,7 @@ export default function AdminDashboard() {
                   id="projectId"
                   type="number"
                   placeholder="1"
-                  className="bg-foreground border-foreground"
+                  className="bg-foreground border-foreground text-carbon-light"
                   value={priceFormData.projectId}
                   onChange={handlePriceInputChange}
                   disabled={isPriceLoading}
@@ -483,7 +479,7 @@ export default function AdminDashboard() {
                     type="number"
                     placeholder="0.001"
                     step="0.000001"
-                    className="bg-foreground border-foreground flex-1"
+                    className="bg-foreground border-foreground flex-1 text-carbon-light"
                     value={priceFormData.priceValue}
                     onChange={handlePriceInputChange}
                     disabled={isPriceLoading}
@@ -529,7 +525,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 border-2 border-foreground">
+        <Card className="col-span-1 border-2 border-foreground bg-carbon-light/50">
           <CardHeader>
             <CardTitle className="uppercase font-bold flex items-center gap-2">
               <DollarSign className="size-5" /> Price Info

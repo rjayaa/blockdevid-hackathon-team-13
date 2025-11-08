@@ -1,7 +1,7 @@
 {
   "name": "hardhat",
   "version": "1.0.0",
-  "description": "🚀 CarbonFi Smart Contracts - Carbon Credit Marketplace on Lisk Sepolia",
+  "description": "🚀 PoRCE Smart Contracts - Carbon Credit Marketplace on Lisk Sepolia",
   "type": "module",
   "scripts": {
     "compile": "hardhat compile",

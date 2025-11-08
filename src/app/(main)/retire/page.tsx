@@ -139,26 +139,26 @@ export default function RetirementPage() {
       <div className="flex items-center gap-2 mb-6">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1 text-sm text-carbon-primary hover:text-carbon-primary transition-colors"
+          className="inline-flex items-center gap-1 text-sm text-carbon-medium hover:text-carbon-medium transition-colors"
         >
           <ArrowLeft className="size-4" /> Back to Dashboard
         </Link>
       </div>
 
-      <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-primary pb-2">
+      <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-carbon-medium text-carbon-medium pb-2">
         Retire Tokens{" "}
         <span className="text-carbon-medium text-xl">(BURN & NFT PROOF)</span>
       </h1>
-      <p className="text-sm text-carbon-primary/80 mb-8 font-space">
+      <p className="text-sm text-carbon-medium/80 mb-8 font-space">
         Bakar token karbon Anda dan dapatkan Sertifikat Pensiun (NFT) sebagai
         bukti audit.
       </p>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <Card className="col-span-2 border-2 border-carbon-primary bg-carbon-medium/30">
+        <Card className="col-span-2 border-2 border-carbon-light bg-carbon-medium/30">
           <CardHeader>
-            <CardTitle className="text-xl uppercase font-bold text-carbon-primary flex items-center gap-2">
-              <Flame className="size-6 text-primary" /> Retire Tokens Form
+            <CardTitle className="text-xl uppercase font-semibold text-carbon-medium flex items-center gap-2">
+              <Flame className="size-6 text-carbon-medium" /> Retire Tokens Form
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -180,7 +180,7 @@ export default function RetirementPage() {
 
             <form onSubmit={handleRetire} className="space-y-6">
               {/* Project ID */}
-              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50 rounded-md">
                 <Label htmlFor="projectId" className="uppercase font-semibold">
                   Project ID
                 </Label>
@@ -196,7 +196,7 @@ export default function RetirementPage() {
               </div>
 
               {/* Amount */}
-              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50 rounded-md">
                 <Label htmlFor="amount" className="uppercase font-semibold">
                   Jumlah Token yang Di-Retire (Burn)
                 </Label>
@@ -215,7 +215,7 @@ export default function RetirementPage() {
               </div>
 
               {/* Retirement URI */}
-              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50">
+              <div className="space-y-4 p-4 border border-carbon-primary/50 bg-carbon-light/50 rounded-md">
                 <Label
                   htmlFor="retirementUri"
                   className="uppercase font-semibold flex items-center gap-2"
@@ -239,7 +239,7 @@ export default function RetirementPage() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full bg-carbon-primary text-carbon-light hover:bg-carbon-primary/90 uppercase font-semibold tracking-widest border-2 border-carbon-primary hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-carbon-primary text-carbon-light hover:bg-carbon-primary/90 uppercase font-semibold tracking-widest border-2 border-carbon-primary hover:border-carbon-light disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? "Processing..." : "Retire & Burn Tokens"}
               </Button>
@@ -247,7 +247,7 @@ export default function RetirementPage() {
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 border-2 border-carbon-primary bg-carbon-light/50">
+        <Card className="col-span-1 border-2 border-carbon-light bg-carbon-light/50">
           <CardHeader>
             <CardTitle className="uppercase font-bold flex items-center gap-2">
               <Flame className="size-5 text-primary" /> Retire Info

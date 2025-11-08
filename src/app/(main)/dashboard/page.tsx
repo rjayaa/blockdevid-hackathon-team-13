@@ -25,20 +25,20 @@ const AssetCard = ({ asset }: { asset: UserAsset }) => {
     if (!project) return null;
 
     return (
-        <Card className="border-2 border-foreground hover:shadow-2xl transition-all bg-carbon-medium/70">
+        <Card className="border-2 border-carbon-medium hover:shadow-2xl transition-all bg-carbon-medium/70">
             <CardHeader>
                 <CardTitle className="uppercase text-lg font-bold tracking-wider">{project.name}</CardTitle>
-                <CardDescription className="text-sm text-foreground/80 font-space">{project.location}</CardDescription>
+                <CardDescription className="text-sm text-carbon-primary/80 font-space">{project.location}</CardDescription>
             </CardHeader>
             <CardContent>
                 <p className="text-3xl font-extrabold text-carbon-primary">{asset.balance.toLocaleString()} TONS</p>
-                <p className="text-xs text-foreground/70 mt-1">{project.type}</p>
+                <p className="text-xs text-carbon-primary/70 mt-1">{project.type}</p>
             </CardContent>
             {/* <CardFooter className="flex justify-between pt-4">
                 <div></div>
                 <Button
                     variant="outline"
-                    className="border-2 border-foreground bg-transparent hover:bg-carbon-medium uppercase text-xs font-bold"
+                    className="border-2 border-carbon-medium bg-transparent hover:bg-carbon-medium uppercase text-xs font-bold"
                     onClick={() => { router.push("/retire") }}
                 >
                     Retire Tokens
@@ -52,13 +52,13 @@ const AssetCard = ({ asset }: { asset: UserAsset }) => {
 const CertificateCard = ({ cert }: { cert: Certificate }) => {
     const isRetired = cert.type === 'Pensiun';
     const Icon = isRetired ? Lock : Leaf;
-    const certTypeStyle = isRetired ? 'bg-destructive text-foreground border-destructive' : 'bg-carbon-primary text-carbon-medium border-carbon-primary';
+    const certTypeStyle = isRetired ? 'bg-destructive text-carbon-medium border-destructive' : 'bg-carbon-primary text-carbon-medium border-carbon-primary';
 
     return (
-        <Card className="border-2 border-foreground bg-carbon-medium/70 hover:shadow-xl transition-all">
+        <Card className="border-2 border-carbon-medium bg-carbon-medium/70 hover:shadow-xl transition-all">
             <CardHeader className="p-4 border-b-2 border-carbon-primary">
                 <CardTitle className="text-lg font-extrabold flex items-center gap-2">
-                    <Icon className={`size-5 p-0.5 rounded-sm ${certTypeStyle}`} />
+                    <Icon className={`size-5 p-1 rounded-sm ${certTypeStyle}`} />
                     {cert.type === 'Pensiun' ? 'Sertifikat Penebusan' : 'Sertifikat Proyek'}
                 </CardTitle>
             </CardHeader>
@@ -67,7 +67,7 @@ const CertificateCard = ({ cert }: { cert: Certificate }) => {
                 <p className="text-xl font-bold">{cert.co2Amount.toLocaleString()} TONS</p>
             </CardContent>
             {/* <CardFooter className="p-4 pt-0">
-                <Link href={`/certificate/${cert.certId}`} className="text-xs uppercase font-bold text-carbon-primary hover:text-foreground/80 flex items-center gap-1">
+                <Link href={`/certificate/${cert.certId}`} className="text-xs uppercase font-bold text-carbon-primary hover:text-carbon-medium/80 flex items-center gap-1">
                     Lihat Bukti Audit <ArrowRight className="size-3" />
                 </Link>
             </CardFooter> */}
@@ -89,10 +89,10 @@ export default function UserDashboard() {
 
   return (
     <div className="pb-12 px-8">
-      <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-foreground pb-2">
+      <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-carbon-medium pb-2">
         Dashboard Aset Saya
       </h1>
-      <p className="text-sm text-foreground/80 mb-8 font-space">
+      <p className="text-sm text-carbon-medium/80 mb-8 font-space">
         Wallet Address: {account.address.slice(0, 10)}...{account.address.slice(-8)}
       </p>
 

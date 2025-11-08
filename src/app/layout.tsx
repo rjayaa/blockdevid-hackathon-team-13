@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "PoRCE - ",
+    title: "PoRCE",
     description: "Web3 wallet integration with Panna SDK",
 };
 

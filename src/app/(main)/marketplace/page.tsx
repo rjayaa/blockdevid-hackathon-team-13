@@ -162,7 +162,7 @@ const BlockchainProjectCard = ({
                         <Button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-foreground text-carbon-medium hover:bg-foreground/80 uppercase font-bold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-carbon-primary text-carbon-medium hover:bg-foreground/80 uppercase font-bold tracking-widest disabled:opacity-50 disabled:cursor-not-allowed border-2 border-carbon-primary"
                         >
                             {isLoading ? (
                                 <>
@@ -232,14 +232,12 @@ const MarketplaceCard = ({ project }: { project: Project }) => {
 }
 
 export default function MarketplacePage() {
-    // Fetch blockchain projects
     const { projects: blockchainProjects, isLoading, error } = useProjects();
-    const dummyProjects = DUMMY_PROJECTS.filter(p => p.isForSale);
-
+    
     return (
         <div className=" pb-12 px-4 md:px-8">
             <h1 className="text-3xl font-bold tracking-widest uppercase mb-2 border-b-4 border-foreground pb-2">
-                Marketplace PORCE
+                Marketplace PoRCE
             </h1>
             <p className="text-sm text-foreground/80 mb-8 font-space">
                 Browse, verifikasi, dan beli kredit karbon yang tersedia dari proyek-proyek Indonesia.

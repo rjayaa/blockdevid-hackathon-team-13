@@ -79,30 +79,30 @@ const Navbar = () => {
     <header className="flex justify-between items-center fixed top-5 px-8 w-full z-50">
       <Link
         href="/"
-        className="text-lg tracking-wider px-4 py-2 bg-foreground text-carbon-medium rounded-sm hover:bg-carbon-primary hover:text-carbon-light transition-colors duration-300"
+        className="text-lg tracking-wider px-4 py-2 bg-transparent text-carbon-medium border-2 border-carbon-light rounded-sm hover:bg-carbon-primary hover:text-carbon-light transition-colors duration-300"
       >
-        PORCE
+        PoRCE
       </Link>
 
       <nav className="flex space-x-6 text-sm uppercase items-center font-space">
         {/* Navigation Links */}
         {account && (
           <>
-          <Link
-              href="/retire"
-              className="hover:text-carbon-primary transition-colors duration-200 border-b border-transparent hover:border-carbon-primary pb-0.5"
-            >
-              Retire
-            </Link>
             <Link
               href="/dashboard"
-              className="hover:text-carbon-primary transition-colors duration-200 border-b border-transparent hover:border-carbon-primary pb-0.5"
+              className="hover:text-carbon-light/50 transition-colors duration-200 border-b border-transparent hover:border-carbon-light/50 pb-0.5"
             >
               Dashboard
             </Link>
             <Link
+              href="/retire"
+              className="hover:text-carbon-light/50 transition-colors duration-200 border-b border-transparent hover:border-carbon-light/50 pb-0.5"
+            >
+              Retire
+            </Link>
+            <Link
               href="/marketplace"
-              className="hover:text-carbon-primary transition-colors duration-200 border-b border-transparent hover:border-carbon-primary pb-0.5"
+              className="hover:text-carbon-light/50 transition-colors duration-200 border-b border-transparent hover:border-carbon-light/50 pb-0.5"
             >
               Marketplace
             </Link>

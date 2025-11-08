@@ -25,7 +25,7 @@ const HeroSection = () => {
                             width={1000}
                             height={1000}
                             alt="Planet Earth"
-                            className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity"
+                            className="w-full h-full object-cover"
                             priority
                         />
                     </div>
@@ -34,17 +34,17 @@ const HeroSection = () => {
                     </div>
                     <div className='w-[23vw] h-[23vw]'>
                         <Image
-                            src={'/globe-outline.png'}
+                            src={'/globe-earth.png'}
                             width={1000}
                             height={1000}
                             alt="Planet Earth"
-                            className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity"
+                            className="w-full h-full object-cover"
                             priority
                         />
                     </div>
                 </div>
                 <div className="self-start text-left w-full">
-                    <h1 className="text-[8vh] leading-snug text-justify text-white">
+                    <h1 className="text-[8vh] leading-snug text-justify text-carbon-medium">
                         Every breath hinges on a stable climate. <br />
                         <span className='font-semibold border-b-4 border-carbon-light text-carbon-light'>PoRCE</span> are tokenizing climate action to safeguard our shared future.
                         <Link href={"/dashboard"} className='text-[4vh] px-4 py-2 bg-carbon-light hover:bg-white hover:text-carbon-darkest text-carbon-darkest border-4 border-carbon-light cursor-pointer ml-8 align-middle rounded-sm font-semibold transition-all'>Get Started ⟶</Link>

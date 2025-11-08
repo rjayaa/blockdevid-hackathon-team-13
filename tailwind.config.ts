@@ -53,7 +53,7 @@ export default {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
 				},
-				// PORCE Color Palette
+				// PoRCE Color Palette
 				carbon: {
 					light: '#FFFD8F',
 					medium: '#B0CE88',
