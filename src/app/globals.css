@@ -4,12 +4,28 @@
 
 body {
   /* font-family: Arial, Helvetica, sans-serif; */
+  background: linear-gradient(135deg, #0a0e0b 0%, #063B16 50%, #0a0e0b 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Dark overlay effect */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at center, rgba(6, 59, 22, 0.1) 0%, rgba(10, 14, 11, 0.3) 100%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 @layer base {
   :root {
 
-    --background: #B0CE88;
+    --background: #0a0e0b;
 
     --foreground: #043915;
 
@@ -132,5 +148,27 @@ body {
 
   body {
     @apply bg-background text-foreground no-scrollbar;
+  }
+}
+
+/* Custom shadow effects */
+@layer components {
+  .shadow-dark {
+    @apply shadow-lg;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .shadow-darker {
+    @apply shadow-2xl;
+    box-shadow: 0 20px 40px rgba(6, 59, 22, 0.3), 0 0 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .card-dark {
+    @apply bg-black bg-opacity-30 backdrop-blur-md border border-carbon-darker border-opacity-30 rounded-lg;
+  }
+
+  .glow-green {
+    @apply shadow-lg;
+    box-shadow: 0 0 20px rgba(176, 206, 136, 0.2);
   }
 }

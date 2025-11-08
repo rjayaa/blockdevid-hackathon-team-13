@@ -53,12 +53,14 @@ export default {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
 				},
-				// CarbonFi Color Palette
+				// PORCE Color Palette
 				carbon: {
 					light: '#FFFD8F',
 					medium: '#B0CE88',
 					primary: '#043915',
-					dark: '#4C763B'
+					dark: '#4C763B',
+					'darker': '#063B16',
+					'darkest': '#0a0e0b'
 				}
 			},
 			borderRadius: {
