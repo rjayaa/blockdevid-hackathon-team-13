@@ -88,6 +88,12 @@ const Navbar = () => {
         {/* Navigation Links */}
         {account && (
           <>
+          <Link
+              href="/retire"
+              className="hover:text-carbon-primary transition-colors duration-200 border-b border-transparent hover:border-carbon-primary pb-0.5"
+            >
+              Retire
+            </Link>
             <Link
               href="/dashboard"
               className="hover:text-carbon-primary transition-colors duration-200 border-b border-transparent hover:border-carbon-primary pb-0.5"

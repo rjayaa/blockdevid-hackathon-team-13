@@ -34,7 +34,7 @@ const AssetCard = ({ asset }: { asset: UserAsset }) => {
                 <p className="text-3xl font-extrabold text-carbon-primary">{asset.balance.toLocaleString()} TONS</p>
                 <p className="text-xs text-foreground/70 mt-1">{project.type}</p>
             </CardContent>
-            <CardFooter className="flex justify-between pt-4">
+            {/* <CardFooter className="flex justify-between pt-4">
                 <div></div>
                 <Button
                     variant="outline"
@@ -43,7 +43,7 @@ const AssetCard = ({ asset }: { asset: UserAsset }) => {
                 >
                     Retire Tokens
                 </Button>
-            </CardFooter>
+            </CardFooter> */}
         </Card>
     )
 }
@@ -66,11 +66,11 @@ const CertificateCard = ({ cert }: { cert: Certificate }) => {
                 <p className="text-sm font-semibold truncate">{cert.projectName}</p>
                 <p className="text-xl font-bold">{cert.co2Amount.toLocaleString()} TONS</p>
             </CardContent>
-            <CardFooter className="p-4 pt-0">
+            {/* <CardFooter className="p-4 pt-0">
                 <Link href={`/certificate/${cert.certId}`} className="text-xs uppercase font-bold text-carbon-primary hover:text-foreground/80 flex items-center gap-1">
                     Lihat Bukti Audit <ArrowRight className="size-3" />
                 </Link>
-            </CardFooter>
+            </CardFooter> */}
         </Card>
     )
 }

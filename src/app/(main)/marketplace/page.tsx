@@ -110,10 +110,10 @@ const BlockchainProjectCard = ({
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-                <div>
+                {/* <div>
                     <p className="text-xs text-foreground/70 mb-1">Metadata URI:</p>
                     <p className="text-xs font-mono truncate text-carbon-primary">{metadataUri}</p>
-                </div>
+                </div> */}
                 <p className="text-sm font-semibold flex items-center gap-1">
                     <DollarSign className="size-4" /> {priceInEth} ETH per Token
                 </p>
@@ -289,14 +289,14 @@ export default function MarketplacePage() {
             </section>
 
             {/* DUMMY PROJECTS SECTION (for reference) */}
-            <section>
+            {/* <section>
                 <h2 className="text-2xl font-bold tracking-widest uppercase mb-6">Proyek Demo (Dummy Data)</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {dummyProjects.map((project) => (
                         <MarketplaceCard key={project.projectId} project={project} />
                     ))}
                 </div>
-            </section>
+            </section> */}
         </div>
     );
 }
